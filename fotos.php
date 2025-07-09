@@ -22,7 +22,7 @@ if (isset($_SESSION['id_logado']) && $_SESSION['logado'] == true) {
         $conexao = conectarBancoDados();
 
         if ($conexao) {
-            // A função BuscaFoto deve retornar um array com 'status', 'dados' (array de fotos) e 'erro'
+            // chamando a  função BuscaFoto  
             $resultado_busca_fotos = BuscaFoto($conexao, $id);
 
             if ($resultado_busca_fotos['status'] && !empty($resultado_busca_fotos['dados'])) {
@@ -38,7 +38,7 @@ if (isset($_SESSION['id_logado']) && $_SESSION['logado'] == true) {
         }
     }
 
-    // O HTML deve ser exibido após o processamento PHP inicial
+
 ?>
     <!DOCTYPE html>
     <html lang="pt-br">
@@ -87,8 +87,7 @@ if (isset($_SESSION['id_logado']) && $_SESSION['logado'] == true) {
                         <a style=" border-color: #ffffff; color: white;" href="logout.php" class="button-logout">Sair</a>
                     <?php
                     } else {
-                        // Estes links não devem ser exibidos se o usuário está logado
-                        // mas manter a lógica aqui por consistência, embora negado.php deva lidar com isso
+
                     ?>
                         <a href="login.php" class="button-login <?php echo ($current_page == 'login.php' ? 'current-page' : ''); ?>">Entrar</a>
                         <a href="cadastro.php" class="button-register <?php echo ($current_page == 'cadastro.php' ? 'current-page' : ''); ?>">Cadastrar</a>

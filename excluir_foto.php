@@ -25,9 +25,9 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] == true) {
         if ($excluir_ok['status'] === true) {
             header('location:index.php');
             exit();
-        }
+        } // caso nao exista redireciona para acesso negado
     } else {
-        header('location:teste.php');
+        header('location:negado.php');
         exit();
     }
 } else {

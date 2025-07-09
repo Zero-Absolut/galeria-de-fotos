@@ -5,133 +5,105 @@
 
 function ValidaUsuario($nome, $email, $senha, $confirmacao_senha)
 {
-    // 1. Inicialização dos Arrays
-    // Este array armazenará todas as mensagens de erro que surgirem durante a validação.
+    // Pra guardar as mensagens de erro que aparecerem
     $error_cadastro = [];
-    // Este array armazenará os dados do usuário APENAS SE TODAS as validações forem bem-sucedidas.
-    // É este array que esperamos que seja retornado quando tudo estiver OK.
+    // Onde a gente guarda os dados do usuário, se tudo der certo
     $array_dados_cadastrais = [];
 
 
-    // 2. Validação do Campo 'nome'
-    // Verifica se o campo 'nome' está vazio.
+    // Vê se o nome tá vazio
     if (empty($nome)) {
         $error_cadastro['nome_vazio'] = "O nome não pode ser vazio.";
     }
-    // Verifica se o 'nome' tem menos de 4 caracteres.
+    // Vê se o nome tem menos de 4 letras
     elseif (strlen($nome) < 4) {
         $error_cadastro['nome_pequeno'] = "O nome deve conter pelo menos 4 caracteres.";
     }
-    // Se o 'nome' passou em todas as validações anteriores, ele é considerado válido
-    // e é adicionado ao array de dados a serem cadastrados.
+    // Se o nome passou, a gente guarda ele
     else {
         $array_dados_cadastrais['nome'] = $nome;
     }
 
 
-    // 3. Validação do Campo 'email'
-    // Verifica se o campo 'email' está vazio.
+    // Vê se o e-mail tá vazio
     if (empty($email)) {
         $error_cadastro['email_vazio'] = "O e-mail não pode ser vazio.";
     }
-    // Verifica se o formato do 'email' é válido usando a função nativa do PHP.
+    // Vê se o formato do e-mail tá certo
     elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error_cadastro['email_invalido'] = "Formato de e-mail inválido.";
     }
-    // Se o 'email' passou em todas as validações, é adicionado ao array de dados.
+    // Se o e-mail passou, a gente guarda ele (em minúsculas, pra padronizar)
     else {
         $array_dados_cadastrais['email'] = strtolower($email);
     }
 
 
-    // 4. Validação da Senha e Confirmação de Senha (Ponto Crucial da Correção)
-    // Verifica se o campo 'senha' está vazio.
+    // Vê a senha e a confirmação
     if (empty($senha)) {
         $error_cadastro['senha_vazia'] = "A senha não pode ser em branco.";
     }
-    // Verifica se a 'senha' tem menos de 8 caracteres OU não contém um caractere especial.
+    // Vê se a senha é pequena ou não tem caractere especial
     elseif (strlen($senha) < 8 || !preg_match('/[^a-zA-Z0-9]/', $senha)) {
         $error_cadastro['senha_pequena'] = "A senha deve conter no mínimo oito caracteres e um caractere especial.";
     } else {
-        // Validação da Confirmação de Senha
+        // Agora, a confirmação da senha
         if (empty($confirmacao_senha)) {
             $error_cadastro['repetir_senha_vazio'] = "A confirmação de senha não pode ser vazia.";
         }
-        // Repete a validação de formato/tamanho para a confirmação, garantindo consistência.
+        // Vê se a confirmação também é pequena ou não tem caractere especial
         elseif (strlen($confirmacao_senha) < 8 || !preg_match('/[^a-zA-Z0-9]/', $confirmacao_senha)) {
             $error_cadastro['repetir_senha_pequena'] = "A confirmação de senha deve conter no mínimo oito caracteres e um caractere especial.";
         }
-        // A condição MAIS IMPORTANTE para a confirmação: verifica se as senhas são diferentes.
+        // Vê se as duas senhas são iguais
         elseif ($confirmacao_senha !== $senha) {
             $error_cadastro['senhas_diferentes'] = "As senhas devem ser as mesmas.";
         }
-        // SOMENTE SE A SENHA PRINCIPAL E A CONFIRMAÇÃO DE SENHA PASSARAM EM TODAS AS VALIDAÇÕES ACIMA,
-        // então podemos fazer o hash da senha e adicioná-la ao array de dados para cadastro.
+        // Se tudo na senha e confirmação estiver OK, a gente faz o hash e guarda
         else {
-            // Aplica o hash de segurança à senha antes de armazená-la. ESSENCIAL para segurança!
             $array_dados_cadastrais['senha'] = password_hash($senha, PASSWORD_DEFAULT);
         }
     }
 
 
-    // 5. Lógica de Retorno Final (Outro Ponto Crucial da Correção)
-    // Este bloco determina qual array será retornado pela função:
-    // o array de ERROS OU o array de DADOS VALIDADOS.
-
-    // SE o array '$error_cadastro' NÃO estiver vazio (ou seja, se algum erro foi adicionado),
-    // a função deve retornar os erros.
+    // Se tiver erro, a gente devolve os erros
     if (!empty($error_cadastro)) {
         return $error_cadastro;
     }
-    // CASO CONTRÁRIO (se '$error_cadastro' estiver vazio, significando que TODAS as validações passaram),
-    // a função retorna os dados que estão prontos para serem cadastrados.
+    // Se não tiver erro, devolve os dados prontos pro cadastro
     else {
         return $array_dados_cadastrais;
     }
 }
 
 
-
-
-
-
-//função para fazer o cadastro de usuario 
-
-
+//função para fazer o cadastro de usuario
 
 
 function InsereCadastro($conn, $nome_validado, $senha_validada, $email_validado)
 {
 
-    // Monta a query SQL com placeholders (?) para os valores que serão inseridos
+    // Prepara a query SQL pra inserir os dados
     $sql = "INSERT INTO usuarios (username, usersenha, email) VALUES (?, ?, ?)";
 
-    // Prepara a query usando a conexão com o banco ($conn)
+    // Prepara a consulta com o banco
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {
-        // Associa os valores reais aos placeholders: todos são strings (sss)
-        // $username, $senha_hash e $email devem estar definidos antes desta etapa
+        // Diz pro banco quais são os dados e o tipo deles (3 strings)
         mysqli_stmt_bind_param($stmt, "sss", $nome_validado, $senha_validada, $email_validado);
 
-        // Executa a query com os valores passados
+        // Tenta executar a inserção
         if (mysqli_stmt_execute($stmt)) {
-
-            //fecha conexao -
+            // Se deu certo, fecha a conexão e diz que foi true
             mysqli_stmt_close($stmt);
-            //retorna a flag caso processo corra bem
             return true;
         } else {
-
-
-            //retorna a flag com o erro
+            // Se deu erro, diz que foi false
             return false;
         }
-
-        // Fecha a statement liberando os recursos
-
     } else {
-        // Se a preparação da statement falhou, mostra o erro da conexão
+        // Se não deu nem pra preparar a consulta, mostra o erro
         echo "Erro ao preparar o statement: " . mysqli_error($conn);
     }
 }
@@ -140,41 +112,37 @@ function InsereCadastro($conn, $nome_validado, $senha_validada, $email_validado)
 function VerificaUsernameEmail($conn, $nome, $email)
 {
 
-    // query de consulta no banco para verificar se possui registro
+    // Consulta pra ver se o nome de usuário ou e-mail já existem
     $sql = "SELECT username, email FROM usuarios WHERE username = ? OR email = ? LIMIT 1";
     $stmt = mysqli_prepare($conn, $sql);
-    // parametros de segurança o ss diz que vai receber duas strings como parametro
+    // Diz pro banco que vai receber duas strings como parâmetro
     mysqli_stmt_bind_param($stmt, "ss", $nome, $email);
-    //verificanado se houve erro ao acessar banco 
 
+    // Tenta rodar a consulta
     if (mysqli_stmt_execute($stmt)) {
-
-
-        mysqli_stmt_store_result($stmt); // Armazena o resultado da consulta
-        if (mysqli_stmt_num_rows($stmt) > 0) { // Verifica se há  linha retornada
-            // -----------------------------------------------------------
-
-            mysqli_stmt_close($stmt); // Fecha o statement
-            return false; // Retorna false: Usuário ou e-mail JÁ EXISTE
+        mysqli_stmt_store_result($stmt); // Guarda o resultado
+        if (mysqli_stmt_num_rows($stmt) > 0) { // Vê se achou alguma coisa
+            mysqli_stmt_close($stmt); // Fecha
+            return false; // Já existe
         } else {
-            mysqli_stmt_close($stmt); // Fecha o statement
-            return true; // Retorna true: Usuário e e-mail NÃO EXISTEM, PODE CADASTRAR
+            mysqli_stmt_close($stmt); // Fecha
+            return true; // Não existe, pode cadastrar
         }
     } else {
-        // Lidar com o erro de execução, você já tem essa parte
+        // Se der erro ao acessar o banco
         return "erro ao acessar banco.";
     }
 }
 
 
-// função de loguin 
+// função de login
 
 
 function LoguinUser($conn, $email_user, $senha_user)
 {
     $array_loguin_erros = [];
 
-    // 1. Validação inicial de campos vazios
+    // Vê se o email ou a senha estão vazios
     if (empty($email_user)) {
         $array_loguin_erros['email_vazio'] = "O email não pode ser em branco.";
     }
@@ -183,15 +151,15 @@ function LoguinUser($conn, $email_user, $senha_user)
         $array_loguin_erros['senha_vazia'] = "A senha não pode ser em branco.";
     }
 
-    // Se já existem erros de campos vazios, retorna o array com os erros
+    // Se tiver erro, a gente já volta com eles
     if (!empty($array_loguin_erros)) {
-        // Retorna a estrutura consistente de falha
         return ['success' => false, 'errors' => $array_loguin_erros];
     }
 
     $email_loguin = strtolower($email_user);
     $senha_loguin = $senha_user;
 
+    // Busca o usuário pelo email
     $sql = "SELECT id, username, usersenha, email, data_cadastro FROM usuarios WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
@@ -205,15 +173,12 @@ function LoguinUser($conn, $email_user, $senha_user)
     if (mysqli_stmt_execute($stmt)) {
         $resultado = mysqli_stmt_get_result($stmt);
 
+        // Vê se achou o usuário
         if ($usuario = mysqli_fetch_assoc($resultado)) {
+            // Compara a senha digitada com a senha hash do banco
             if (password_verify($senha_loguin, $usuario['usersenha'])) {
-
-
-                // Retorna a estrutura consistente de sucesso
-                //fechando conexao com banco
-                mysqli_stmt_close($stmt);
-                return ['success' => true, 'user' => $usuario]; // Encapsula o usuário sob a chave 'user'
-
+                mysqli_stmt_close($stmt); // Fecha a conexão
+                return ['success' => true, 'user' => $usuario]; // Login bem-sucedido
             } else {
                 $array_loguin_erros['senha_incorreta'] = "Senha incorreta.";
             }
@@ -226,299 +191,239 @@ function LoguinUser($conn, $email_user, $senha_user)
 
     mysqli_stmt_close($stmt);
 
-    // Se a função chegou até aqui, houve um erro.
+    // Se chegou aqui, é porque deu algum erro no login
     return ['success' => false, 'errors' => $array_loguin_erros];
 }
 
 
-// A função Upload recebe a conexão com o banco de dados,
-// o array do arquivo de imagem (do $_FILES), o título, a descrição,
-// e o ID do usuário logado.
-// Ela retorna um array com 'status' (true para sucesso, false para erro)
-// e uma mensagem ou erro detalhado.
+// Função pra fazer upload de imagens
 function Upload($conn, $imagem, $titlo, $descricao, $id_usuario_logado)
 {
-
-    // --- 1. Definição e Criação dos Caminhos de Diretório ---
-    // É crucial ter dois tipos de caminhos:
-    // a) Caminho PÚBLICO (URL): Usado para acessar a imagem via navegador (no <img src="">)
-    //    e é o que será salvo no banco de dados. Sempre termine com uma barra (/).
+    // Caminho que vai ser usado na URL (no navegador)
     $diretorio_publico = "/galeria/uploads/imagens/";
 
-    // b) Caminho ABSOLUTO no SERVIDOR: Usado pelas funções de arquivo do PHP (move_uploaded_file, unlink, mkdir).
-    //    $_SERVER['DOCUMENT_ROOT'] aponta para a raiz do seu site no sistema de arquivos do servidor.
+    // Caminho real da pasta no seu servidor
     $diretorio_servidor = $_SERVER['DOCUMENT_ROOT'] . $diretorio_publico;
 
-    // Garante que o diretório de destino exista. Se não existir, tenta criá-lo.
-    // O '0755' são as permissões (leitura/escrita/execução para o dono, leitura/execução para grupo/outros).
-    // 'true' permite criar diretórios aninhados (ex: /uploads/imagens/2025/).
+    // Se a pasta não existe, tenta criar
     if (!is_dir($diretorio_servidor)) {
         if (!mkdir($diretorio_servidor, 0755, true)) {
-            // Se a criação da pasta falhar (geralmente por permissões), retorna um erro.
-            return ['status' => false, 'erro' => "Erro interno: Não foi possível criar o diretório de uploads. Verifique as permissões de pasta no servidor."];
+            return ['status' => false, 'erro' => "Erro interno: Não deu pra criar a pasta de uploads. Vê as permissões aí."];
         }
     }
 
-    // --- 2. Obtenção do Nome Original e Extensão ---
-    // Pega apenas o nome do arquivo original enviado pelo usuário (ex: "minha_foto.jpg").
-    // Isso é seguro porque não inclui o caminho completo do cliente.
+    // Pega o nome e a extensão originais do arquivo
     $nome_original_do_upload = basename($imagem["name"]);
-
-    // Obtém a extensão do arquivo a partir do nome original.
-    // 'pathinfo()' é a função correta para isso, NÃO 'phpinfo()'.
-    // 'PATHINFO_EXTENSION' retorna apenas a extensão (ex: "jpg").
-    // 'strtolower()' converte para minúsculas para padronizar a validação.
     $extensao_arquivo = strtolower(pathinfo($nome_original_do_upload, PATHINFO_EXTENSION));
 
-    // Tipos de arquivos permitidos para upload.
+    // Tipos de arquivo que a gente aceita
     $tipos_permitidos = ["jpg", "jpeg", "png", "gif"];
 
-    // --- 3. Geração de um Nome de Arquivo Único e Definição de Caminhos Finais ---
-    // ESTE É UM PASSO CRÍTICO PARA SEGURANÇA E ORGANIZAÇÃO:
-    // Gera um nome de arquivo único para evitar colisões (dois usuários enviando "foto.jpg")
-    // e para prevenir ataques de sobrescrita de arquivos.
-    // 'uniqid()' cria um ID único baseado no tempo. 'true' adiciona mais entropia para maior unicidade.
+    // Cria um nome único pro arquivo pra não dar conflito
     $novo_nome_arquivo_unico = uniqid('img_', true) . '.' . $extensao_arquivo;
 
-    // Define o caminho COMPLETO no sistema de arquivos do servidor para onde o arquivo será movido.
-    // Esta variável será usada por 'move_uploaded_file()' e 'unlink()'.
+    // Caminho completo onde a imagem vai ficar no servidor
     $caminho_final_servidor = $diretorio_servidor . $novo_nome_arquivo_unico;
 
-    // Define o caminho PÚBLICO (URL) que será salvo no banco de dados.
-    // Este é o caminho que a tag <img src=""> usará.
+    // Caminho que vai pro banco de dados (pra usar na web)
     $caminho_para_db_e_url = $diretorio_publico . $novo_nome_arquivo_unico;
 
-    // --- 4. Validação da Extensão do Arquivo ---
-    // Verifica se a extensão obtida está na lista de tipos permitidos.
+
+    // Vê se a extensão é permitida
     if (!in_array($extensao_arquivo, $tipos_permitidos)) {
-        return ['status' => false, 'erro' => "Erro: Apenas arquivos JPG, JPEG, PNG e GIF são permitidos."];
+        return ['status' => false, 'erro' => "Erro: Só aceitamos JPG, JPEG, PNG e GIF."];
     }
 
-    // --- 5. Validação do Tamanho Máximo do Arquivo (6MB) ---
-    $tamanho_permitido = 6 * 1024 * 1024; // 6 Megabytes em bytes.
-
-    // ERRO CORRIGIDO AQUI: O acesso ao tamanho deve ser $imagem['size'], não $imagem['image']['size'].
-    // Lembre-se que '$imagem' já é o sub-array do $_FILES['nome_do_input'].
+    // Vê se o tamanho do arquivo não é grande demais (até 6MB)
+    $tamanho_permitido = 6 * 1024 * 1024;
     if ($imagem['size'] > $tamanho_permitido) {
-        return ['status' => false, 'erro' => "O arquivo é muito grande. Tamanho máximo permitido é 6MB."];
+        return ['status' => false, 'erro' => "O arquivo é muito grande. O máximo é 6MB."];
     }
 
-
-    // --- 7. Tentativa de Mover o Arquivo para o Destino Final ---
-    // ERRO CORRIGIDO AQUI: O primeiro parâmetro deve ser o caminho temporário ($imagem['tmp_name']).
-    // O segundo parâmetro é o caminho ABSOLUTO final no servidor ($caminho_final_servidor).
-    // Se o movimento for bem-sucedido, o arquivo agora está permanentemente no seu servidor.
+    // Tenta mover o arquivo temporário pro lugar certo no servidor
     if (move_uploaded_file($imagem['tmp_name'], $caminho_final_servidor)) {
 
-        // --- 8. Preparação e Execução da Inserção no Banco de Dados ---
+        // Prepara a query pra salvar as infos da imagem no banco
         $sql = "INSERT INTO imagens 
                 (titulo, descricao, nome_arquivo, caminho_arquivo, data_upload, usuario_id) 
                 VALUES (?, ?, ?, ?, NOW(), ?)";
 
-        $stmt = mysqli_prepare($conn, $sql); // Prepara a consulta para evitar SQL Injection.
+        $stmt = mysqli_prepare($conn, $sql);
 
         if ($stmt) {
-            // --- 9. Ligação de Parâmetros (TODOS OS ERROS CORRIGIDOS AQUI!) ---
-            // 'ssssi': Define os tipos de dados para cada placeholder '?':
-            // 's' = string (para titulo, descricao, nome_arquivo, caminho_arquivo)
-            // 'i' = integer (para usuario_id)
-            // A ORDEM das variáveis deve CORRESPONDER EXATAMENTE à ordem dos '?' na sua query SQL.
-            // Aqui, estamos assumindo que '$titlo' é o parâmetro de entrada para o título.
+            // Cola os valores na query: 4 strings e 1 inteiro
             mysqli_stmt_bind_param(
                 $stmt,
                 'ssssi',
-                $titlo,                     // 1º ? -> titulo (string)
-                $descricao,                 // 2º ? -> descricao (string)
-                $novo_nome_arquivo_unico,   // 3º ? -> nome_arquivo (o nome único gerado, string)
-                $caminho_para_db_e_url,     // 4º ? -> caminho_arquivo (o caminho público/URL, string)
-                $id_usuario_logado          // 5º ? -> usuario_id (inteiro)
+                $titlo,
+                $descricao,
+                $novo_nome_arquivo_unico,
+                $caminho_para_db_e_url,
+                $id_usuario_logado
             );
 
-            // Tenta executar a consulta preparada.
+            // Se conseguir salvar no banco
             if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_close($stmt); // Fecha o statement para liberar recursos.
-                // Retorno de sucesso.
+                mysqli_stmt_close($stmt); // Fecha
                 return [
                     'status' => true,
                     'mensagem' => "A imagem foi enviada e registrada com sucesso!",
-
                 ];
             } else {
-                // --- 10. Limpeza de Arquivo Órfão em Caso de Falha no Banco de Dados ---
-                // Se o arquivo foi movido para o servidor, mas a inserção no DB falhou,
-                // devemos DELETAR o arquivo físico para evitar "lixo" e inconsistência.
+                // Se der erro ao salvar no banco, a gente apaga a imagem do servidor pra não ficar lixo
                 unlink($caminho_final_servidor);
                 mysqli_stmt_close($stmt);
-                return ['status' => false, 'erro' => "Erro ao guardar informações da imagem no banco de dados: " . mysqli_error($conn)];
+                return ['status' => false, 'erro' => "Erro ao guardar informações da imagem no banco: " . mysqli_error($conn)];
             }
         } else {
-            // --- 11. Limpeza de Arquivo Órfão em Caso de Falha na Preparação do SQL ---
-            // Se o 'mysqli_prepare' falhar (ex: sintaxe SQL errada, problema na conexão),
-            // o arquivo já pode ter sido movido. Também deletamos ele.
+            // Se der erro ao preparar a consulta SQL, apaga a imagem do servidor também
             unlink($caminho_final_servidor);
-            return ['status' => false, 'erro' => "Erro interno: Falha ao preparar a consulta SQL para o banco de dados."];
+            return ['status' => false, 'erro' => "Erro interno: Falha ao preparar a consulta SQL."];
         }
     } else {
-        // --- 12. Erro ao Mover o Arquivo Físico ---
-        // Este 'else' captura falhas no 'move_uploaded_file()'.
-        // Geralmente ocorre por problemas de permissão de escrita na pasta de destino no servidor.
-        return ['status' => false, 'erro' => "Erro ao salvar a imagem no servidor. Verifique as permissões da pasta 'uploads/imagens'."];
+        // Se não conseguiu mover o arquivo (problema de permissão na pasta, por exemplo)
+        return ['status' => false, 'erro' => "Erro ao salvar a imagem no servidor. Vê as permissões da pasta 'uploads/imagens'."];
     }
 }
 
 
-// função buscar fotos na base
-
-
+// função pra buscar fotos no banco
 function BuscaFoto($conn, $id)
 {
     $retorno = [
         'status' => false,
-        'dados' => [], // Inicializado como um array vazio para armazenar MÚLTIPLAS fotos
+        'dados' => [], // Aqui vão as fotos, se encontrar
         'erro' => ''
     ];
 
+    // Query pra buscar as fotos de um usuário específico
     $sql = "SELECT * FROM imagens WHERE usuario_id = ?";
-
     $stmt = mysqli_prepare($conn, $sql);
 
-    // Verifica se a preparação da instrução SQL foi bem-sucedida
+    // Vê se preparou a query direitinho
     if ($stmt === false) {
-        // Loga o erro real para depuração (não exibir para o usuário final em produção)
         error_log("Erro ao preparar a instrução: " . mysqli_error($conn));
         $retorno['erro'] = "Erro interno do servidor ao preparar a busca.";
         return $retorno;
     }
 
-    // Vincula o parâmetro. 'i' é para INT
+    // Cola o ID do usuário na query (é um inteiro)
     $bind_success = mysqli_stmt_bind_param($stmt, 'i', $id);
 
-    // Verifica se a vinculação dos parâmetros foi bem-sucedida
+    // Vê se conseguiu colar o parâmetro
     if ($bind_success === false) {
         error_log("Erro ao vincular parâmetros: " . mysqli_stmt_error($stmt));
-        mysqli_stmt_close($stmt); // Fecha o statement mesmo em caso de falha na vinculação
+        mysqli_stmt_close($stmt);
         $retorno['erro'] = "Erro interno do servidor ao vincular dados.";
         return $retorno;
     }
 
-    // Executa a instrução preparada
+    // Executa a busca
     if (mysqli_stmt_execute($stmt)) {
         $resultado = mysqli_stmt_get_result($stmt);
 
-        // Verifica se houve um conjunto de resultados válido
+        // Se achou resultados
         if ($resultado) {
-            $fotos_encontradas = []; // Array para coletar todas as fotos
+            $fotos_encontradas = []; // Array pra guardar as fotos
 
-            // Percorre CADA LINHA do conjunto de resultados
+            // Pega cada foto e adiciona no array
             while ($foto = mysqli_fetch_assoc($resultado)) {
-                $fotos_encontradas[] = $foto; // Adiciona cada linha (que é uma foto) ao array
+                $fotos_encontradas[] = $foto;
             }
 
             $retorno['status'] = true;
-            $retorno['dados'] = $fotos_encontradas; // O array 'dados' agora contém TODAS as fotos
+            $retorno['dados'] = $fotos_encontradas; // Aqui estão todas as fotos
 
-            mysqli_free_result($resultado); // Libera a memória do conjunto de resultados
+            mysqli_free_result($resultado); // Libera a memória do resultado
         } else {
-            // Este bloco é mais provável para erros se a consulta não for um SELECT ou em caso de erro na obtenção do resultado
             error_log("Erro ao obter resultado da consulta: " . mysqli_stmt_error($stmt));
             $retorno['erro'] = "Erro interno: falha ao processar resultados.";
         }
     } else {
-        // Erro na execução da instrução
+        // Se deu erro na execução
         error_log("Erro na execução da consulta: " . mysqli_stmt_error($stmt));
         $retorno['erro'] = "Erro ao tentar fazer busca.";
     }
 
-    mysqli_stmt_close($stmt); // Sempre feche o statement no final, independentemente do sucesso da execução
-
+    mysqli_stmt_close($stmt); // Sempre fecha a conexão no final
     return $retorno;
 }
 
 
-
-
 function PesquisaFoto($conn, $id_user, $termo_busca)
 {
-    // Inicializa o array de retorno 
+    // A gente vai retornar isso no final
     $retorno = [
         'status' => false,
         'erro' => '',
         'dados' => []
     ];
 
-
+    // Query pra buscar fotos por título ou descrição pra um usuário
     $sql = "SELECT * FROM imagens WHERE usuario_id = ? AND (titulo LIKE ? OR descricao LIKE ? )";
 
     $stmt = mysqli_prepare($conn, $sql);
 
-    // Verifica se a preparação da instrução falhou
+    // Vê se a query foi preparada certinho
     if ($stmt === false) {
         error_log("Erro ao preparar a instrução SQL: " . mysqli_error($conn));
         $retorno['erro'] = "Erro interno do servidor ao preparar a busca.";
         return $retorno;
     }
 
-    //  Preparar o termo de busca para usar com LIKE, adicionando os curingas '%'.
+    // Prepara o termo de busca pra usar com LIKE (adiciona os '%')
     $termo_busca_like = '%' . $termo_busca . '%';
 
-    // Vincular os parâmetros à instrução preparada.
-    //    'isss' define os tipos dos parâmetros:
-    //    'i' para $id_user (inteiro)
-    //    's' para $termo_busca_like (string), repetido para cada coluna que será pesquisada com LIKE.
+    // Cola os parâmetros na query: o ID do usuário (inteiro) e o termo de busca (string, duas vezes)
     $bind = mysqli_stmt_bind_param($stmt, 'iss', $id_user, $termo_busca_like, $termo_busca_like);
 
-    // Verifica se a vinculação dos parâmetros falhou
+    // Vê se conseguiu colar os parâmetros
     if ($bind === false) {
         error_log("Erro ao vincular parâmetros na busca: " . mysqli_stmt_error($stmt));
-        mysqli_stmt_close($stmt); // Fechar o statement para liberar recursos.
+        mysqli_stmt_close($stmt);
         $retorno['erro'] = "Erro interno do servidor ao vincular dados para a busca.";
         return $retorno;
     }
 
-    // 4. Executar a instrução preparada.
+    // Roda a busca
     if (mysqli_execute($stmt)) {
-        $resultado_query = mysqli_stmt_get_result($stmt); // Obtém o objeto mysqli_result
+        $resultado_query = mysqli_stmt_get_result($stmt);
 
-        // Verifica se a obtenção dos resultados foi bem-sucedida
+        // Se conseguiu pegar os resultados
         if ($resultado_query) {
-            // Inicializa um array vazio para armazenar todos os resultados encontrados.
             $fotos_encontradas = [];
 
-            // Loop para buscar todas as linhas e adicioná-las ao array.
+            // Pega cada foto que achou e guarda no array
             while ($foto = mysqli_fetch_assoc($resultado_query)) {
-                $fotos_encontradas[] = $foto; // Adiciona cada foto ao array
+                $fotos_encontradas[] = $foto;
             }
 
-            mysqli_free_result($resultado_query); // Libera a memória do resultado.
+            mysqli_free_result($resultado_query); // Libera a memória
 
-            // Verifica se alguma foto foi encontrada
+            // Se achou alguma foto
             if (!empty($fotos_encontradas)) {
                 $retorno['status'] = true;
                 $retorno['dados'] = $fotos_encontradas;
             } else {
                 $retorno['status'] = false;
-                $retorno['erro'] = "Nenhuma foto encontrada para o termo de busca.";
+                $retorno['erro'] = "Nenhuma foto encontrada para o que você digitou.";
             }
         } else {
-            // Este caso geralmente indica um problema sério após a execução, mas antes de pegar os resultados.
             error_log("Erro ao obter o resultado da busca: " . mysqli_stmt_error($stmt));
             $retorno['erro'] = "Erro ao processar os resultados da busca.";
         }
     } else {
-        // Erro na execução da instrução SQL.
+        // Se deu erro ao executar a query
         error_log("Erro ao executar a instrução SQL de busca: " . mysqli_stmt_error($stmt));
         $retorno['erro'] = "Erro interno do servidor ao executar a busca.";
     }
 
-    mysqli_stmt_close($stmt); // fechando stmt
-
-    return $retorno; // Retorna o array de status, erro e dados.
+    mysqli_stmt_close($stmt); // Fecha
+    return $retorno;
 }
 
 
-// função para excluir fotos
-
-
+// função pra excluir fotos
 function ExcluirFotos($conn, $id_usuario, $id_excluir)
 {
     $resultado_excluir = [
@@ -527,8 +432,8 @@ function ExcluirFotos($conn, $id_usuario, $id_excluir)
         'dados' => ""
     ];
 
+    // Primeiro, a gente busca a foto pra pegar o caminho dela
     $sql = "SELECT * FROM imagens WHERE id = ? AND usuario_id = ?";
-
     $stmt = mysqli_prepare($conn, $sql);
 
     $bind = mysqli_stmt_bind_param($stmt, 'ii', $id_excluir, $id_usuario);
@@ -536,71 +441,59 @@ function ExcluirFotos($conn, $id_usuario, $id_excluir)
     if ($bind === false) {
         $resultado_excluir['status'] = false;
         $resultado_excluir['erro'] = "Erro ao preparar a conexão.";
-
         return $resultado_excluir;
     }
+
     if (mysqli_execute($stmt)) {
         $resultado_busca = mysqli_stmt_get_result($stmt);
-        //verifica se existe resgitro
+        // Vê se a foto existe e pertence ao usuário
         if ($resultado_busca && mysqli_num_rows($resultado_busca) > 0) {
-
-            //associa a pesquisa a variavel 
             $foto_excluir = mysqli_fetch_assoc($resultado_busca);
+            mysqli_free_result($resultado_busca); // Libera memória
 
-            //liberando espaço
-            mysqli_free_result($resultado_busca);
+            // Monta o caminho completo da foto no servidor
+            $caminho_exluir = $_SERVER['DOCUMENT_ROOT'] . $foto_excluir['caminho_arquivo'];
 
-            // Monta o caminho absoluto completo da imagem no servidor para exclusão
-            $caminho_exluir = $_SERVER['DOCUMENT_ROOT'] // Retorna o caminho absoluto da 
-                //raiz pública do servidor (ex: C:/xampp/htdocs)
-                . $foto_excluir['caminho_arquivo']; // Adiciona o caminho relativo salvo no banco de dados
-            // (ex: /galeria/uploads/imagens/arquivo.png)
-
-
-
-
-
-            // verifica se o caminho do servidor existe 
+            // Vê se o arquivo existe no servidor
             if (file_exists($caminho_exluir)) {
-
-                // se existir tenta excluir a foto
+                // Tenta apagar a foto do servidor
                 if (unlink($caminho_exluir)) {
-                    // sql para excluir a foto do banco de dados e todos os registros dela 
+                    // Agora, apaga o registro da foto do banco de dados
                     $sql_delete = "DELETE FROM imagens WHERE id = ? AND usuario_id = ?";
-
-                    //preparando stmt de delete
                     $stmt_delete = mysqli_prepare($conn, $sql_delete);
-
-                    // atribuindo os parsmetros de consulta
                     $bind = mysqli_stmt_bind_param($stmt_delete, 'ii', $id_excluir, $id_usuario);
 
-                    //verifica se o prepare ocorreou bem
                     if ($bind === false) {
                         mysqli_stmt_close($stmt_delete);
                         $resultado_excluir['status'] = false;
                         $resultado_excluir['erro'] = "Erro ao preparar a conexão.";
-
                         return $resultado_excluir;
                     }
-                    //verifica se a execulsao vai ocorrer 
+                    // Se conseguiu apagar do banco
                     if (mysqli_execute($stmt_delete)) {
                         mysqli_stmt_close($stmt_delete);
-                        // atribui o array de resultados 
                         $resultado_excluir['status'] = true;
-                        $resultado_excluir['dados'] = "foto excluida.";
+                        $resultado_excluir['dados'] = "foto excluída.";
                     } else {
                         mysqli_stmt_close($stmt_delete);
-                        $resultado_excluir['erro'] = "erro ao excluir foto.";
+                        $resultado_excluir['erro'] = "erro ao excluir foto do banco.";
                     }
                 } else {
-                    $resultado_excluir['erro'] = "Erro ao deletar foto.";
+                    $resultado_excluir['erro'] = "Erro ao apagar a foto do servidor.";
                 }
             } else {
-                $resultado_excluir['erro'] = "Foto não encontrada.";
+                // Se a foto não foi encontrada no servidor, mas existe no banco
+                // Podemos tentar remover só do banco ou retornar um erro específico.
+                // Por segurança, vamos apenas indicar que não achou o arquivo físico.
+                $resultado_excluir['erro'] = "Foto não encontrada no servidor.";
                 $resultado_excluir['dados'] = $foto_excluir;
             }
+        } else {
+            $resultado_excluir['erro'] = "Foto não encontrada ou você não tem permissão para excluí-la.";
         }
         mysqli_stmt_close($stmt);
+    } else {
+        $resultado_excluir['erro'] = "Erro ao buscar a foto para exclusão.";
     }
 
     return $resultado_excluir;
@@ -615,23 +508,26 @@ function UpdateFotos($conn, $id_update, $title_update, $description_update)
         'dados' => ""
     ];
 
+    // Query pra atualizar título e descrição da foto
     $sql = "UPDATE imagens SET titulo = ?, descricao = ? WHERE id = ?";
-
     $stmt = mysqli_prepare($conn, $sql);
 
+    // Cola os parâmetros: título (string), descrição (string) e ID (inteiro)
     $bind = mysqli_stmt_bind_param($stmt, 'ssi', $title_update, $description_update, $id_update);
     if ($bind === false) {
         $resultado_update['status'] = false;
         $resultado_update['erro'] = "Erro ao preparar a conexão.";
         return $resultado_update;
     }
+
+    // Se conseguir executar a atualização
     if (mysqli_stmt_execute($stmt)) {
         $resultado_update['status'] = true;
         $resultado_update['dados'] = "Alterado com sucesso.";
     } else {
         $resultado_update['status'] = false;
-        $resultado_update['erro'] = "Erro ao inserir no banco de dados";
+        $resultado_update['erro'] = "Erro ao atualizar no banco de dados.";
     }
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_close($stmt); // Fecha
     return $resultado_update;
 }

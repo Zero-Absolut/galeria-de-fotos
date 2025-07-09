@@ -1,13 +1,13 @@
 <?php
-
+// abre a sessao e verifica se existe alguma ativa
 session_start();
 
 if (isset($_SESSION['logado']) && $_SESSION['logado']) {
 
 
-
+    // captura o nome do usuario logado
     $nome_usuario = $_SESSION['nome_logado'];
-    //inicio html
+
 ?>
 
     <!DOCTYPE html>

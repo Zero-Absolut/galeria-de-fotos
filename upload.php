@@ -1,5 +1,5 @@
 <?php
-
+//incluindo arquivos e abrindo sessao
 include_once('funcoes/conexao.php');
 include_once('funcoes/funcoes.php');
 
@@ -12,18 +12,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
 
     // Pegando os valores da sessão
-    $id_upload = htmlspecialchars($_SESSION['id_logado'] ?? ''); // Adicionado ?? ''
-    $nome_usuario = htmlspecialchars($_SESSION['nome_logado'] ?? ''); // Adicionado ?? ''
-    $email_upload = htmlspecialchars($_SESSION['email_logado'] ?? ''); // Adicionado ?? ''
+    $id_upload = htmlspecialchars($_SESSION['id_logado'] ?? '');
+    $nome_usuario = htmlspecialchars($_SESSION['nome_logado'] ?? '');
+    $email_upload = htmlspecialchars($_SESSION['email_logado'] ?? '');
 
     // Inicializa a variável para erros de upload de arquivo
     $upload_erro_file = '';
 
-    // Verificando se o método é POST (ou seja, foi feito o envio do formulário)
+    // Verificando se o método é POST
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $titulo_imagem = $_POST['title'] ?? ''; // Adicionado ?? ''
-        $descricao_imagem = $_POST['descricao'] ?? ''; // Adicionado ?? ''
+        $titulo_imagem = $_POST['title'] ?? '';
+        $descricao_imagem = $_POST['descricao'] ?? '';
 
         // Verificando se a imagem foi enviada e sem erros
         if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
@@ -81,7 +81,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
             exit();
         }
     }
-    // A parte do HTML deve estar fora do 'if ($_SERVER['REQUEST_METHOD'] == 'POST')' para que seja sempre exibida
+
 ?>
     <!DOCTYPE html>
     <html lang="pt-br">

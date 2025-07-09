@@ -4,17 +4,17 @@ include_once('funcoes/funcoes.php');
 
 
 
-// 1. Definições do tempo de vida da sessão
+//definicao do tempo de vida da sessão
 ini_set('session.gc_maxlifetime', 1800); // 30 minutos
 ini_set('session.cookie_lifetime', 1800); // 30 minutos (ou 0 para expirar com o navegador)
 
 // Abrindo a sessão
 session_start();
 
-// Inicializa a variável $erros como um array vazio para evitar undefined variable
+// Inicializa a variável $erros como um array vazio 
 $erros = [];
 
-// Verifica se a requisição é um POST (envio do formulário de login)
+// Verifica a requisição
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $email_validar_loguin = trim($_POST['email'] ?? '');
     $senha_validar_loguin = trim($_POST['password'] ?? '');
@@ -25,9 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($conexao) {
         $verifica_loguin = LoguinUser($conexao, $email_validar_loguin, $senha_validar_loguin);
 
-        // A verificação é sempre na chave 'success' do array retornado
+        // A verificação do retorno da função
         if ($verifica_loguin['success']) {
-            // Em caso de sucesso, os dados do usuário estão dentro da chave 'user'
+
+            // resgatando os valores da chave user
             $usuario_logado = $verifica_loguin['user'];
 
             // Define as variáveis de sessão para o usuário logado
@@ -37,11 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION['data_cadastro_logado'] = $usuario_logado['data_cadastro'];
             $_SESSION['logado'] = true;
 
-            // Redireciona para a página principal (index.php)
+            // Redireciona para a página principal 
             header('location:index.php');
             exit(); // Garante que o script pare de executar após o redirecionamento
         } else {
-            // Em caso de falha, os erros estão dentro da chave 'errors'
+            // em caso de falha os erros estao na chave errors
             $erros = $verifica_loguin['errors'];
         }
         // Fechar a conexão com o banco de dados

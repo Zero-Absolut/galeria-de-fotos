@@ -4,10 +4,11 @@ include_once('funcoes/funcoes.php');
 
 // iniciando a sessao
 session_start();
-
+//verificando se existe sessao ativa
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
+    // verifica o tipo do metodo
     if ($_SERVER['REQUEST_METHOD'] == "GET") {
-        print_r($_GET);
+        // recupera os valores enviados pela url
         $id_foto = $_GET['id'];
         $id_editar = $_GET['id'];
         $id_user = $_SESSION['id_logado'];
@@ -16,6 +17,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
         $titulo = $_GET['title'];
     }
 } else {
+    //redireciona caso nao exista sessao 
     header('location:negado.php');
     exit();
 }

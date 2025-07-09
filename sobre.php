@@ -1,7 +1,5 @@
 <?php
-// sobre.php
-// É crucial iniciar a sessão no topo de qualquer página que utilize sessões.
-// Isso permite que o PHP acesse ou modifique a superglobal $_SESSION.
+//inicia a sessao
 session_start();
 
 // Obtém o nome do arquivo atual para usar na lógica de "active link"
@@ -40,7 +38,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <nav class="main-nav">
                 <ul>
                     <?php
-                    // Lógica para alterar os links de navegação baseado no estado de login
+                    // Lógica para alterar os links de navegação
                     if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                         // Links para usuário logado
                         echo '<li><a href="index.php" class="' . ($current_page == 'index.php' ? 'current-page' : '') . '">Início</a></li>';
@@ -50,7 +48,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         echo '<li><a href="sobre.php" class="' . ($current_page == 'sobre.php' ? 'current-page' : '') . '">Sobre</a></li>';
                         echo '<li><a href="contato.php" class="' . ($current_page == 'contato.php' ? 'current-page' : '') . '">Contato</a></li>';
                     } else {
-                        // Links para usuário NÃO logado (landing page)
+                        // Links para usuário nao logado
                         echo '<li><a href="index.php" class="' . ($current_page == 'index.php' ? 'current-page' : '') . '">Início</a></li>';
                         echo '<li><a href="sobre.php" class="' . ($current_page == 'sobre.php' ? 'current-page' : '') . '">Sobre</a></li>';
                         echo '<li><a href="contato.php" class="' . ($current_page == 'contato.php' ? 'current-page' : '') . '">Contato</a></li>';
@@ -61,6 +59,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </nav>
             <div class="user-actions">
                 <?php
+                //exisbe o nome do usuario logado
                 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                     $nome_usuario = htmlspecialchars($_SESSION['nome_logado'] ?? 'Visitante');
                 ?>

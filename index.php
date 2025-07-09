@@ -3,8 +3,10 @@
 session_start();
 include_once('funcoes/conexao.php');
 include_once('funcoes/funcoes.php');
-
+// inicio termo busca vazio
 $termo_busca = "";
+
+// verificando se existe sessao ativa
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
 
     $id = $_SESSION['id_logado'];
@@ -66,7 +68,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                         echo '<li><a href="sobre.php">Sobre</a></li>';
                         echo '<li><a href="contato.php">Contato</a></li>';
                     } else {
-                        // Links para usuário NÃO logado 
+                        // Links para usuário nao logado 
                         echo '<li><a href="index.php" class="active">Início</a></li>';
                         echo '<li><a href="sobre.php">Sobre</a></li>';
                         echo '<li><a href="contato.php">Contato</a></li>';
