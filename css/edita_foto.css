@@ -1,0 +1,667 @@
+/* Importar Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap");
+
+/* ========================================================= */
+/* VARIÁVEIS CSS (AGORA ALINHADAS COM index.css e nova paleta) */
+/* ========================================================= */
+:root {
+  --color-primary: #6a0572; /* Um roxo mais vibrante - do index.css */
+  --color-primary-dark: #3a023f; /* Uma versão mais escura do roxo primário - do index.css */
+  --color-accent: #9b59b6; /* Roxo mais claro, para destaques - do index.css */
+  --color-text-light: #f4f4f4; /* Texto claro para fundos escuros - do index.css */
+  --color-text-dark: #333; /* Texto escuro padrão - do index.css */
+  --color-white: #ffffff; /* do index.css */
+  --color-off-white: #f9f9f9; /* Off-white do index.css */
+  --color-gray-light: #e0e0e0; /* do index.css */
+  --color-border: #ddd; /* do index.css */
+  --color-success: #28a745; /* do index.css */
+  --color-error: #dc3545; /* do index.css */
+  --color-secondary-text: #666; /* Cor para parágrafos secundários - do index.css */
+
+  --shadow-light: rgba(0, 0, 0, 0.08); /* do index.css */
+  --shadow-medium: rgba(0, 0, 0, 0.15); /* do index.css */
+  --shadow-dark: rgba(0, 0, 0, 0.25); /* do index.css */
+
+  --header-height: 80px; /* Altura do cabeçalho - do index.css */
+  --color-error-rgb: 220, 53, 69; /* RGB de #dc3545 - Adicionada para o modal, se usado */
+}
+
+/* ========================================================= */
+/* ESTILOS GERAIS E RESET (AGORA ALINHADOS COM index.css) */
+/* ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-dark); /* Usando variável do index.css */
+  background: linear-gradient(
+    135deg,
+    var(--color-off-white),
+    var(--color-gray-light)
+  ); /* Usando variáveis do index.css */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Adicionado para consistência com index.css */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative; /* Adicionado para z-index */
+  z-index: 2; /* Adicionado para z-index */
+}
+
+/* Animação de Fundo (AGORA ALINHADA COM index.css e nova paleta) */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  ); /* Usando variáveis da nova paleta do index.css */
+  opacity: 0.1; /* Transparência suave como no index.css */
+  z-index: 0; /* Fica atrás de todo o conteúdo */
+  animation: gradientShift 20s ease infinite alternate; /* Nome da animação do index.css */
+}
+
+@keyframes gradientShift {
+  /* Nome da animação do index.css */
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* LINKS GLOBAIS - AJUSTADOS PARA FONTE MAIS SUAVE E MENOR, E ALINHAMENTO GERAL */
+a {
+  color: var(--color-accent); /* Usando variável do index.css */
+  text-decoration: none;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  font-weight: 400; /* Fonte mais suave */
+  font-size: 0.98em; /* Um pouco menor */
+}
+
+a:hover {
+  color: var(--color-primary); /* Usando variável do index.css */
+  font-weight: 600; /* Pode ficar mais "pesado" ao hover para destaque */
+}
+
+/* ========================================================= */
+/* CABEÇALHO PRINCIPAL - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  color: var(--color-white); /* Usando variável do index.css */
+}
+
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.main-header .logo img {
+  max-height: 50px;
+  width: auto;
+  display: block;
+}
+
+.main-header .logo a:hover img {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.main-header .logo a::after {
+  display: none;
+}
+
+/* Menu Hamburguer (Inclusão completa para funcionalidade no HTML) */
+.menu-toggle-checkbox {
+  display: none; /* Esconde o input checkbox */
+}
+
+.menu-toggle {
+  display: none; /* Escondido por padrão, visível apenas em mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+  z-index: 1001; /* Garante que o ícone esteja acima do nav em mobile */
+}
+
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-white);
+  transition: all 0.3s ease;
+  border-radius: 2px; /* Adicionado para consistência */
+}
+
+/* Animação do hamburguer ao abrir */
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Navegação Principal - AJUSTADO PARA ALINHAR COM O NOVO PADRÃO DE LINKS */
+.main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px; /* Usando gap para espaçamento mais moderno, consistência */
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: var(--color-off-white); /* Usando variável do index.css */
+  font-weight: 400; /* Fonte mais suave no menu */
+  font-size: 1em; /* Ajustado para um pouco menor que o 1.05em anterior, mas consistente */
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  display: inline-block; /* Mantido para que o ::after funcione corretamente */
+}
+
+.main-nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-accent); /* Usando variável do index.css */
+  transition: width 0.3s ease;
+}
+
+.main-nav ul li a:hover::after,
+.main-nav ul li a.active::after {
+  /* Adicionado .active para consistência */
+  width: 100%;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+  /* Adicionado .active para consistência */
+  color: var(--color-accent); /* Usando variável do index.css */
+  font-weight: 600; /* Destacar no hover */
+}
+
+/* Estilo para o link da página atual (Sublinhado e cor de destaque) */
+.main-nav ul li a.current-page {
+  color: var(--color-accent);
+  font-weight: 600; /* Destaque para página atual */
+}
+
+.main-nav ul li a.current-page::after {
+  width: 100%;
+  background-color: var(--color-accent);
+  left: 0;
+  bottom: 0;
+}
+
+/* Ações do Usuário (login/cadastro/sair) */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Consistência com o outro CSS */
+}
+
+.welcome-message {
+  /* Adicionado para consistência, caso haja uma mensagem de boas-vindas */
+  color: var(--color-gray-light);
+  font-size: 0.95em;
+  font-weight: 400;
+  white-space: nowrap;
+  margin-right: 5px;
+}
+
+.button-login,
+.button-register,
+.button-logout {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+  white-space: nowrap;
+  border: 2px solid;
+}
+
+.button-login {
+  color: var(--color-white);
+  border-color: var(--color-off-white);
+  background-color: transparent;
+}
+
+.button-login:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.button-register {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.button-register:hover {
+  background-color: var(--color-primary); /* Consistência com o index.css */
+  border-color: var(--color-primary); /* Consistência com o index.css */
+}
+
+.button-logout {
+  background-color: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.button-logout:hover {
+  background-color: var(--color-error);
+  color: var(--color-white);
+}
+
+/* Specific styling for the login page to show register button and hide login button */
+.page-login .user-actions .button-login {
+  display: none;
+}
+
+/* Adicionado para consistência: o botão de registro também pode ser escondido na página de login */
+.page-login .user-actions .button-register {
+  /* Isso esconde o botão de registro, se o usuário já estiver na página de login, e vice-versa */
+  /* Ajuste conforme a lógica de exibição desejada no seu HTML/JS */
+}
+
+/* ========================================================= */
+/* CONTEÚDO DA PÁGINA DE LOGIN - AJUSTADO PARA O HEADER FIXO E PADRÕES */
+/* ========================================================= */
+main {
+  flex-grow: 1; /* Adicionado main flex-grow para consistência */
+}
+
+.form-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Ajuste crucial: Adicionar a altura do cabeçalho ao padding-top */
+  padding: calc(40px + var(--header-height)) 20px 40px 20px;
+  min-height: calc(
+    100vh - var(--header-height) - 160px
+  ); /* Ajuste min-height para compensar o footer também */
+  background-color: var(
+    --color-off-white
+  ); /* Para consistência com o background do main/gallery-page-container */
+  box-shadow: inset 0 0 15px var(--shadow-light); /* Consistência com gallery-page-container */
+  position: relative;
+  z-index: 2;
+}
+
+.form-card {
+  background-color: var(--color-white);
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.form-card h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.2em;
+  color: var(--color-primary-dark);
+  margin-bottom: 30px;
+}
+
+.main-form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  font-size: 0.95em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--color-border); /* Usando variável do index.css */
+  border-radius: 5px;
+  font-size: 1em;
+  color: var(--color-text-dark); /* Usando variável do index.css */
+  background-color: var(--color-off-white);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group textarea:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+}
+
+/* Specific styles for the image preview in edita_foto.html */
+.form-group .imagem-visualizacao {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Ensures it takes full width of its container and respects max-width */
+  margin: 15px auto 25px auto; /* Centers the image and adds vertical spacing */
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px 20px;
+  margin-top: 20px;
+  font-size: 1.1em;
+  font-weight: 600;
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px var(--shadow-light);
+}
+
+.submit-button:hover {
+  background-color: var(--color-primary); /* Usando variável do index.css */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px var(--shadow-medium);
+}
+
+.form-footer-link {
+  margin-top: 25px;
+  font-size: 0.95em;
+  color: var(--color-secondary-text);
+}
+
+.form-footer-link a {
+  color: var(--color-accent); /* Cor do link */
+  font-weight: 400; /* AJUSTADO: Fonte mais suave */
+  text-decoration: none;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+}
+
+.form-footer-link a:hover {
+  color: var(--color-primary); /* AJUSTADO: Segue o padrão global de hover */
+  font-weight: 600; /* Destaque no hover */
+}
+
+/* ========================================================= */
+/* RODAPÉ (FOOTER) - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+footer {
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  padding: 40px 0; /* Ajustado para 40px */
+  text-align: center;
+  box-shadow: 0 -4px 10px var(--shadow-dark); /* Usando variável do index.css */
+  margin-top: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Ajustado para space-between */
+  align-items: center; /* Adicionado para alinhamento vertical */
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 20px; /* Adicionado gap */
+}
+
+.footer-links {
+  display: flex;
+  gap: 25px; /* Ajustado para 25px */
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-grow: 1; /* Adicionado flex-grow */
+}
+
+.footer-links a {
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  font-weight: 400; /* AJUSTADO: Fonte mais suave */
+  font-size: 0.9em; /* AJUSTADO: Um pouco menor */
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+}
+
+.footer-links a:hover {
+  color: var(
+    --color-white
+  ); /* AJUSTADO: Agora muda para branco no hover, como no index.css */
+  font-weight: 600; /* Destaque no hover */
+}
+
+.social-media {
+  display: flex;
+  gap: 15px; /* Ajustado para 15px */
+  flex-grow: 1; /* Adicionado flex-grow */
+  justify-content: flex-end; /* Ajustado para flex-end */
+}
+
+.social-media img {
+  width: 30px; /* Ajustado para consistência com o index.css */
+  height: 30px; /* Ajustado para consistência com o index.css */
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.social-media a:hover img {
+  transform: scale(1.1);
+}
+
+.copyright {
+  font-size: 0.9em; /* Ajustado para 0.9em */
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVIDADE) - AGORA IDÊNTICAS AO index.css */
+/* ========================================================= */
+@media (max-width: 992px) {
+  .main-nav ul li {
+    margin-left: 20px;
+  }
+  .user-actions {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header .container {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+  .menu-toggle {
+    display: flex;
+    margin-left: 15px;
+    order: 3;
+  }
+  .main-header .logo {
+    flex-grow: 0; /* Consistência */
+  }
+  .main-nav {
+    display: block;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .menu-toggle-checkbox:checked ~ .main-nav {
+    max-height: 300px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .main-nav ul {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+    gap: 0; /* Consistência */
+  }
+  .main-nav ul li {
+    margin: 0;
+  }
+  .main-nav ul li a {
+    color: var(--color-white);
+    padding: 12px 20px;
+    display: block;
+    font-size: 1em; /* Ajuste para mobile */
+    font-weight: 400; /* Mais suave */
+  }
+  .main-nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-accent);
+    font-weight: 600; /* Destaque no hover */
+  }
+  /* Destaque para link ativo em mobile */
+  .main-nav ul li a.current-page {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-accent) !important;
+    font-weight: 600;
+  }
+  .user-actions {
+    order: 2;
+    margin-left: auto;
+  }
+  .page-login .user-actions .button-register {
+    margin-left: 0;
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .footer-links a {
+    display: block;
+    margin: 10px 0;
+    font-size: 0.9em; /* Ajuste para mobile */
+  }
+  .social-media {
+    justify-content: center; /* Centraliza ícones sociais em mobile */
+  }
+  .form-card h2 {
+    font-size: 2em;
+  }
+  .form-group .imagem-visualizacao {
+    margin: 10px auto 20px auto; /* Adjust spacing for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .main-header .logo img {
+    max-height: 40px; /* Ajuste para telas menores */
+  }
+  .user-actions .button-login,
+  .user-actions .button-register {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+  .form-card {
+    padding: 25px;
+  }
+  .form-card h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    font-size: 0.9em;
+  }
+  .form-group input,
+  .form-group textarea {
+    padding: 10px 12px;
+    font-size: 0.95em;
+  }
+  .submit-button {
+    padding: 12px 15px;
+    font-size: 1em;
+  }
+  .form-footer-link {
+    font-size: 0.85em;
+  }
+}

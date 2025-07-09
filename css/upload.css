@@ -1,0 +1,865 @@
+/* Importar Google Fonts */
+/* Não é necessário importar novamente as Google Fonts aqui se já estiverem em um arquivo CSS principal (como index.css)
+   que é importado antes deste. Caso contrário, adicione a linha abaixo: */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap");
+
+/* ========================================================= */
+/* VARIÁVEIS CSS (AGORA ALINHADAS COM index.css) */
+/* ========================================================= */
+:root {
+  --color-primary: #6a0572; /* Um roxo mais vibrante - do index.css */
+  --color-primary-dark: #3a023f; /* Uma versão mais escura do roxo primário - do index.css */
+  --color-accent: #9b59b6; /* Roxo mais claro, para destaques - do index.css */
+  --color-text-light: #f4f4f4; /* Texto claro para fundos escuros - do index.css */
+  --color-text-dark: #333; /* Texto escuro padrão - do index.css */
+  --color-white: #ffffff; /* do index.css */
+  --color-off-white: #f9f9f9; /* Off-white do index.css */
+  --color-gray-light: #e0e0e0; /* do index.css */
+  --color-border: #ddd; /* do index.css */
+  --color-success: #28a745; /* do index.css */
+  --color-error: #dc3545; /* do index.css */
+  --color-secondary-text: #666; /* Cor para parágrafos secundários - do index.css */
+
+  --shadow-light: rgba(0, 0, 0, 0.08); /* do index.css */
+  --shadow-medium: rgba(0, 0, 0, 0.15); /* do index.css */
+  --shadow-dark: rgba(0, 0, 0, 0.25); /* do index.css */
+
+  --header-height: 80px; /* Altura do cabeçalho - do index.css */
+}
+
+/* ========================================================= */
+/* ESTILOS GERAIS E RESET (AGORA ALINHADOS COM index.css) */
+/* ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-dark); /* Usando variável do index.css */
+  background: linear-gradient(
+    135deg,
+    var(--color-off-white),
+    var(--color-gray-light)
+  ); /* Usando variáveis do index.css */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Adicionado para consistência com index.css */
+  /* REMOVIDO: padding-top da tag body. Será aplicado ao container de conteúdo. */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative; /* Adicionado para z-index */
+  z-index: 2; /* Adicionado para z-index */
+}
+
+/* Animação de Fundo (AGORA ALINHADA COM index.css) */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  ); /* Usando variáveis do index.css */
+  opacity: 0.1; /* Transparência suave como no index.css */
+  z-index: 0; /* Fica atrás de todo o conteúdo */
+  animation: gradientShift 20s ease infinite alternate; /* Nome da animação do index.css */
+}
+
+@keyframes gradientShift {
+  /* Nome da animação do index.css */
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* LINKS GLOBAIS - AJUSTADOS PARA FONTE MAIS SUAVE E MENOR, E ALINHAMENTO GERAL */
+a {
+  color: var(--color-accent); /* Usando variável do index.css */
+  text-decoration: none;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  font-weight: 400; /* Fonte mais suave */
+  font-size: 0.98em; /* Um pouco menor */
+}
+
+a:hover {
+  color: var(--color-primary); /* Usando variável do index.css */
+  font-weight: 600; /* Pode ficar mais "pesado" ao hover para destaque */
+}
+
+/* ========================================================= */
+/* CABEÇALHO PRINCIPAL - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  color: var(--color-white); /* Usando variável do index.css */
+}
+
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.main-header .logo img {
+  max-height: 50px;
+  width: auto;
+  display: block;
+}
+
+.main-header .logo a:hover img {
+  opacity: 0.8;
+  transition: opacity 0.3s ease; /* Adicionado de volta para consistência */
+}
+
+.main-header .logo a::after {
+  display: none;
+}
+
+/* Menu Hamburguer (Inclusão completa para funcionalidade no HTML) */
+.menu-toggle-checkbox {
+  display: none; /* Esconde o input checkbox */
+}
+
+.menu-toggle {
+  display: none; /* Escondido por padrão, visível apenas em mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+  z-index: 1001; /* Garante que o ícone esteja acima do nav em mobile */
+}
+
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-white);
+  transition: all 0.3s ease;
+  border-radius: 2px; /* Adicionado para consistência */
+}
+
+/* Animação do hamburguer ao abrir */
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Navegação Principal - AJUSTADO PARA ALINHAR COM O NOVO PADRÃO DE LINKS */
+.main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px; /* Usando gap para espaçamento mais moderno, consistência */
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: var(--color-off-white); /* Usando variável do index.css */
+  font-weight: 400; /* Fonte mais suave no menu */
+  font-size: 1em; /* Ajustado para um pouco menor que o 1.05em anterior, mas consistente */
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  display: inline-block; /* Mantido para que o ::after funcione corretamente */
+}
+
+.main-nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-accent); /* Usando variável do index.css */
+  transition: width 0.3s ease;
+}
+
+.main-nav ul li a:hover::after,
+.main-nav ul li a.active::after {
+  /* Adicionado .active para consistência */
+  width: 100%;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+  /* Adicionado .active para consistência */
+  color: var(--color-accent); /* Usando variável do index.css */
+  font-weight: 600; /* Destacar no hover */
+}
+
+/* Estilo para o link da página atual (Sublinhado e cor de destaque) */
+.main-nav ul li a.current-page {
+  color: var(--color-accent);
+  font-weight: 600; /* Destaque para página atual */
+}
+
+.main-nav ul li a.current-page::after {
+  width: 100%;
+  background-color: var(--color-accent);
+  left: 0;
+  bottom: 0;
+}
+
+/* Ações do Usuário (login/cadastro/sair) */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Consistência com o outro CSS */
+}
+
+.welcome-message {
+  /* Adicionado para consistência */
+  color: var(--color-gray-light);
+  font-size: 0.95em; /* Ajustado para ser um pouco menor também */
+  font-weight: 400; /* Mais suave */
+  white-space: nowrap;
+  margin-right: 5px;
+}
+
+.button-login,
+.button-register,
+.button-logout {
+  /* Adicionado button-logout para consistência */
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600; /* Mantido para botões para melhor legibilidade */
+  font-size: 0.95em; /* Ligeiramente menor */
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+  white-space: nowrap; /* Adicionado para consistência */
+  border: 2px solid; /* Adicionado para consistência */
+}
+
+.button-login {
+  color: var(--color-white);
+  border-color: var(--color-off-white); /* Usando variável do index.css */
+  background-color: transparent;
+}
+
+.button-login:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.button-register {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.button-register:hover {
+  background-color: var(--color-primary); /* Consistência com o index.css */
+  border-color: var(--color-primary); /* Consistência com o index.css */
+}
+
+.button-logout {
+  /* Adicionado para consistência com o outro CSS */
+  background-color: transparent;
+  color: var(--color-error); /* Cor de erro para o botão de sair */
+  border-color: var(--color-error);
+}
+.button-logout:hover {
+  /* Adicionado para consistência com o outro CSS */
+  background-color: var(--color-error);
+  color: var(--color-white);
+}
+
+/* ========================================================= */
+/* SEÇÃO DE UPLOAD (MAIN CONTENT) - AJUSTADO PARA O HEADER FIXO E PADRÃO */
+/* ========================================================= */
+main {
+  flex-grow: 1; /* Faz o main ocupar todo o espaço restante */
+}
+
+.upload-section {
+  padding: calc(40px + var(--header-height)) 20px 40px; /* Ajusta padding-top para o header fixo */
+  background-color: var(--color-off-white);
+  /* margin-top: 30px; REMOVIDO: o padding acima já cuida do espaço */
+  box-shadow: 0 -2px 10px var(--shadow-light);
+  position: relative;
+  z-index: 2;
+  min-height: calc(
+    100vh - var(--header-height) - 160px
+  ); /* Mantido, garante bom preenchimento da tela */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Alinha ao topo em vez de centro, para não comprimir */
+  align-items: center;
+}
+
+.upload-section .container {
+  max-width: 900px;
+  text-align: center;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.upload-section h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.8em;
+  color: var(--color-primary-dark);
+  margin-bottom: 20px;
+}
+
+.upload-intro {
+  font-size: 1.1em;
+  color: var(--color-secondary-text);
+  margin-bottom: 40px;
+}
+
+.upload-form-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+  gap: 30px;
+  background-color: var(--color-white);
+  padding: 35px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px var(--shadow-medium);
+  align-items: flex-start; /* Alinha os itens ao topo do contêiner flex */
+}
+
+.upload-form {
+  flex: 2; /* Ocupa mais espaço */
+  min-width: 300px; /* Garante que não fique muito estreito */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.upload-tips {
+  flex: 1; /* Ocupa menos espaço */
+  min-width: 250px; /* Garante que não fique muito estreito */
+  background-color: var(--color-off-white); /* Usando variável: um off-white */
+  border-left: 4px solid var(--color-accent); /* Linha de destaque */
+  padding: 25px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 2px 10px var(--shadow-light); /* Usando variável de shadow */
+}
+
+.upload-tips h3 {
+  font-family: "Playfair Display", serif;
+  color: var(--color-primary-dark);
+  font-size: 1.6em;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.upload-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.upload-tips ul li {
+  margin-bottom: 10px;
+  font-size: 0.95em;
+  color: var(--color-secondary-text);
+  position: relative;
+  padding-left: 25px; /* Espaço para o ícone customizado */
+}
+
+.upload-tips ul li::before {
+  content: "✔️"; /* Ícone de checkmark */
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-size: 1.1em;
+  line-height: 1.5; /* Alinha o ícone com o texto */
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  font-size: 1em; /* Ajustado para consistência com outros labels */
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: calc(100% - 20px); /* Ajusta a largura com padding */
+  padding: 12px 10px;
+  border: 1px solid var(--color-border); /* Usando variável de borda */
+  border-radius: 6px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1em;
+  color: var(--color-text-dark); /* Usando variável para cor do texto */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2); /* Usando rgba do accent */
+  outline: none;
+}
+
+/* Esconder o input de arquivo padrão */
+.form-group input[type="file"] {
+  display: none;
+}
+
+.upload-button {
+  display: inline-flex; /* Para alinhar ícone e texto */
+  align-items: center;
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  padding: 12px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1em; /* Ajustado para consistência */
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  gap: 10px; /* Espaço entre o ícone e o texto */
+  margin-right: 15px; /* Espaço antes do nome do arquivo */
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.upload-button:hover {
+  background-color: var(--color-primary); /* Usando color-primary no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.upload-icon {
+  font-size: 1.2em;
+}
+
+.file-name {
+  font-size: 0.95em;
+  color: var(--color-secondary-text);
+  display: inline-block;
+  max-width: calc(100% - 200px); /* Ajuste conforme a largura do botão */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adiciona '...' se o nome for muito longo */
+  white-space: nowrap; /* Impede que o texto quebre a linha */
+  vertical-align: middle; /* Alinha verticalmente com o botão */
+}
+
+.submit-upload-button {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.05em; /* Ajustado para consistência */
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px; /* Espaço acima do botão */
+  width: auto; /* Ajusta a largura ao conteúdo */
+}
+
+.submit-upload-button:hover {
+  background-color: var(--color-primary); /* Usando color-primary no hover */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px var(--shadow-medium);
+}
+
+.submit-icon {
+  font-size: 1.2em;
+}
+
+/* ========================================================= */
+/* RODAPÉ (FOOTER) - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+footer {
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  padding: 40px 0; /* Ajustado para 40px */
+  text-align: center;
+  box-shadow: 0 -4px 10px var(--shadow-dark); /* Usando variável do index.css */
+  margin-top: auto;
+  position: relative; /* Mantido por conta do z-index anterior */
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Ajustado para space-between */
+  align-items: center; /* Adicionado para alinhamento vertical */
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 20px; /* Adicionado gap */
+}
+
+.footer-links {
+  display: flex;
+  gap: 25px; /* Ajustado para 25px */
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-grow: 1; /* Adicionado flex-grow */
+}
+
+.footer-links a {
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  font-weight: 400; /* AJUSTADO: Fonte mais suave */
+  font-size: 0.9em; /* AJUSTADO: Um pouco menor */
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+}
+
+.footer-links a:hover {
+  color: var(
+    --color-white
+  ); /* AJUSTADO: Agora muda para branco no hover, como no index.css */
+  font-weight: 600; /* Destaque no hover */
+}
+
+.social-media {
+  display: flex;
+  gap: 15px; /* Ajustado para 15px */
+  flex-grow: 1; /* Adicionado flex-grow */
+  justify-content: flex-end; /* Ajustado para flex-end */
+}
+
+.social-media img {
+  width: 30px; /* Ajustado para consistência com o index.css */
+  height: 30px; /* Ajustado para consistência com o index.css */
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.social-media a:hover img {
+  transform: scale(1.1);
+}
+
+.copyright {
+  font-size: 0.9em; /* Ajustado para 0.9em */
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20px;
+}
+
+/* ========================================================= */
+/* ESTILOS PARA O MODAL DE FEEDBACK (NOVO / PADRONIZADO) */
+/* ========================================================= */
+.modal {
+  display: none; /* Esconde o modal por padrão */
+  position: fixed; /* Fica fixo na tela */
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Adiciona scroll se o conteúdo for grande */
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo semi-transparente */
+  display: flex; /* Usa flexbox para centralizar o conteúdo */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--color-white); /* Usando variável */
+  margin: auto; /* Centraliza o bloco na tela */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px var(--shadow-medium); /* Usando variável de shadow */
+  width: 80%; /* Largura do modal */
+  max-width: 500px; /* Largura máxima para não ficar muito grande */
+  text-align: center;
+  position: relative; /* Necessário para posicionar o botão de fechar */
+  animation: fadeIn 0.3s ease-out; /* Animação suave ao aparecer */
+}
+
+/* Estilos para bordas de feedback (sucesso/erro) */
+.modal-content.success {
+  border: 2px solid var(--color-success); /* Borda verde para mensagens de sucesso */
+}
+
+.modal-content.error {
+  border: 2px solid var(--color-error); /* Borda vermelha para mensagens de erro */
+}
+
+.close-button {
+  color: var(--color-secondary-text); /* Cor mais suave */
+  position: absolute; /* Posiciona o botão de fechar */
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer; /* Indica que é clicável */
+  transition: color 0.3s ease; /* Transição para o hover */
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: var(--color-primary-dark); /* Escurece no hover */
+  text-decoration: none;
+}
+
+.modal-message {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Cores do texto da mensagem baseadas no tipo de feedback */
+.modal-content.success .modal-message {
+  color: var(--color-success); /* Usando variável de sucesso */
+}
+
+.modal-content.error .modal-message {
+  color: var(--color-error); /* Usando variável de erro */
+}
+
+/* Animação para o modal aparecer suavemente */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVIDADE) - AGORA IDÊNTICAS AO index.css */
+/* ========================================================= */
+
+@media (max-width: 992px) {
+  .main-nav ul li {
+    margin-left: 20px;
+  }
+  .user-actions {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header .container {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+
+  .menu-toggle {
+    display: flex;
+    margin-left: 15px;
+    order: 3;
+  }
+
+  .main-header .logo {
+    flex-grow: 0; /* Consistência */
+  }
+
+  .main-nav {
+    display: block;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .menu-toggle-checkbox:checked ~ .main-nav {
+    max-height: 300px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+    gap: 0; /* Adicionado para consistência */
+  }
+
+  .main-nav ul li {
+    margin: 0;
+  }
+
+  .main-nav ul li a {
+    color: var(--color-white);
+    padding: 12px 20px;
+    display: block;
+    font-size: 1em; /* Ajuste para mobile */
+    font-weight: 400; /* Mais suave */
+  }
+
+  .main-nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-accent);
+    font-weight: 600; /* Destaque no hover */
+  }
+
+  /* Destaque para link ativo em mobile */
+  .main-nav ul li a.current-page {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-accent) !important;
+    font-weight: 600;
+  }
+
+  .user-actions {
+    order: 2;
+    margin-left: auto;
+  }
+
+  /* Seções de Upload */
+  .upload-section {
+    padding: calc(40px + var(--header-height)) 15px 40px; /* Ajuste para mobile */
+  }
+
+  .upload-section h2 {
+    font-size: 2.2em;
+  }
+
+  .upload-intro {
+    font-size: 1em;
+    margin-bottom: 30px;
+  }
+
+  .upload-form-container {
+    flex-direction: column; /* Empilha os blocos em telas menores */
+    gap: 25px;
+    padding: 25px;
+  }
+
+  .upload-form,
+  .upload-tips {
+    min-width: unset; /* Remove a largura mínima para flexibilidade */
+    width: 100%;
+  }
+
+  .upload-tips {
+    border-left: none; /* Remove a borda lateral */
+    border-top: 4px solid var(--color-accent); /* Adiciona uma borda superior */
+    padding-top: 20px;
+  }
+
+  .file-input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .upload-button {
+    width: 100%; /* Botão de upload ocupa a largura total */
+    justify-content: center; /* Centraliza o texto e ícone */
+    margin-right: 0; /* Remove margem lateral */
+    margin-bottom: 10px; /* Adiciona espaço abaixo do botão */
+  }
+
+  .file-name {
+    max-width: 100%; /* Nome do arquivo ocupa a largura total */
+    text-align: center;
+  }
+
+  .submit-upload-button {
+    width: 100%; /* Botão de envio ocupa a largura total */
+  }
+
+  /* Modal em mobile */
+  .modal-content {
+    width: 90%; /* Mais largo em telas pequenas */
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-header {
+    padding: 10px 0;
+  }
+  .main-header .logo img {
+    max-height: 40px;
+  }
+  .user-actions .button-login,
+  .user-actions .button-register,
+  .user-actions .button-logout {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+
+  /* Seções de Upload */
+  .upload-section h2 {
+    font-size: 1.8em;
+  }
+
+  .upload-form-container {
+    padding: 20px;
+  }
+
+  .upload-button,
+  .submit-upload-button {
+    padding: 12px 20px;
+    font-size: 1em;
+  }
+
+  .form-group input[type="text"],
+  .form-group textarea {
+    padding: 10px 8px;
+    font-size: 0.95em;
+  }
+
+  .upload-tips h3 {
+    font-size: 1.4em;
+  }
+
+  .upload-tips ul li {
+    font-size: 0.9em;
+  }
+}

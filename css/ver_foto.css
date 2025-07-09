@@ -1,0 +1,274 @@
+/* Importar Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap");
+
+/* ========================================================= */
+/* VARIÁVEIS CSS (ALINHADAS COM O SEU index.css) */
+/* ========================================================= */
+:root {
+  --color-primary: #6a0572; /* Um roxo mais vibrante */
+  --color-primary-dark: #3a023f; /* Uma versão mais escura do roxo primário */
+  --color-accent: #9b59b6; /* Roxo mais claro, para destaques */
+  --color-text-light: #f4f4f4; /* Texto claro para fundos escuros */
+  --color-text-dark: #333; /* Texto escuro padrão */
+  --color-white: #ffffff;
+  --color-off-white: #f9f9f9;
+  --color-gray-light: #e0e0e0;
+  --color-border: #ddd;
+  --color-success: #28a745;
+  --color-error: #dc3545;
+  --color-secondary-text: #666; /* Cor para parágrafos secundários */
+
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-dark: rgba(0, 0, 0, 0.25);
+}
+
+/* ========================================================= */
+/* ESTILOS GERAIS E RESET PARA O VISUALIZADOR */
+/* ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-dark);
+  background: linear-gradient(
+    135deg,
+    var(--color-off-white),
+    var(--color-gray-light)
+  );
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Animação de Fundo (mantida para consistência visual do site) */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  );
+  opacity: 0.1;
+  z-index: -1;
+  animation: gradientShift 20s ease infinite alternate;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ========================================================= */
+/* ESTILOS ESPECÍFICOS DO CONTAINER DO VISUALIZADOR */
+/* ========================================================= */
+.viewer-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  width: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+
+  /* Adicionado: Animação de entrada para o container principal */
+  animation: fadeInScale 0.8s ease-out forwards;
+  opacity: 0; /* Começa invisível */
+  transform: scale(0.95); /* Começa um pouco menor */
+}
+
+@keyframes fadeInScale {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.viewer-content {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 8px;
+  /* Sombra aprimorada: mais suave e com um leve "lift" */
+  box-shadow: 0 10px 40px var(--shadow-medium), 0 0 0 1px rgba(0, 0, 0, 0.05); /* Sombra principal e uma fina borda para nitidez */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  max-height: calc(100% - 80px);
+  overflow: hidden;
+  margin-bottom: 30px;
+
+  /* Opcional: Fundo degradê sutil para o card da imagem */
+  background: linear-gradient(
+    45deg,
+    var(--color-off-white) 0%,
+    var(--color-white) 100%
+  );
+  border: 1px solid var(--color-gray-light); /* Borda suave */
+
+  /* Animação de entrada para o conteúdo da imagem */
+  animation: fadeInSlideUp 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  animation-delay: 0.2s; /* Atraso para aparecer depois do container */
+}
+
+@keyframes fadeInSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.viewer-content img {
+  max-width: 100%;
+  max-height: 70vh;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 4px; /* Bordas levemente arredondadas para a imagem */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra leve na imagem */
+}
+
+/* ========================================================= */
+/* ESTILO DO BOTÃO DE VOLTAR */
+/* ========================================================= */
+.back-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1.1em;
+  /* Transições mais suaves e detalhadas */
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 4px 10px var(--shadow-light);
+  border: 2px solid var(--color-primary-dark);
+
+  /* Animação de entrada para o botão */
+  animation: fadeInSlideUp 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  animation-delay: 0.4s; /* Atraso para aparecer depois da imagem */
+}
+
+.back-button:hover {
+  background-color: var(--color-primary);
+  transform: translateY(-3px) scale(1.02); /* Mais "lift" e levemente maior no hover */
+  box-shadow: 0 8px 20px var(--shadow-medium); /* Sombra mais intensa no hover */
+  border-color: var(--color-primary);
+  cursor: pointer; /* Indica que é clicável */
+}
+
+/* ========================================================= */
+/* ESTILO PARA MENSAGEM DE ERRO (se a imagem não carregar) */
+/* ========================================================= */
+.viewer-error {
+  background-color: var(--color-white);
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px var(--shadow-medium);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  border-top: 5px solid var(--color-error);
+
+  /* Animação de entrada para o erro também */
+  animation: fadeInScale 0.8s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.viewer-error h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5em;
+  color: var(--color-error);
+  margin-bottom: 20px;
+}
+
+.viewer-error p {
+  font-size: 1.1em;
+  color: var(--color-secondary-text);
+  margin-bottom: 30px;
+}
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVIDADE) - Ajustadas para a nova elegância */
+/* ========================================================= */
+@media (max-width: 768px) {
+  .viewer-container {
+    padding: 15px; /* Reduz padding geral */
+    max-width: 98vw; /* Ocupa mais largura em telas menores */
+    max-height: 98vh; /* Ocupa mais altura em telas menores */
+  }
+
+  .viewer-content {
+    padding: 10px; /* Reduz padding interno da imagem */
+    margin-bottom: 15px;
+  }
+
+  .viewer-content img {
+    max-height: 60vh; /* Ajusta a altura máxima da imagem em telas menores */
+  }
+
+  .back-button {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+
+  .viewer-error h1 {
+    font-size: 2em;
+  }
+  .viewer-error p {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .viewer-container {
+    padding: 10px;
+  }
+
+  .viewer-content {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .viewer-content img {
+    max-height: 55vh; /* Ainda mais restritivo em celulares muito pequenos */
+  }
+
+  .back-button {
+    padding: 8px 18px;
+    font-size: 0.85em;
+  }
+
+  .viewer-error h1 {
+    font-size: 1.8em;
+  }
+  .viewer-error p {
+    font-size: 0.9em;
+  }
+}

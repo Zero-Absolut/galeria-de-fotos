@@ -1,0 +1,637 @@
+/* Importar Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap");
+
+/* ========================================================= */
+/* VARIÁVEIS CSS (AGORA ALINHADAS COM index.css) */
+/* ========================================================= */
+:root {
+  --color-primary: #6a0572; /* Um roxo mais vibrante - do index.css */
+  --color-primary-dark: #3a023f; /* Uma versão mais escura do roxo primário - do index.css */
+  --color-accent: #9b59b6; /* Roxo mais claro, para destaques - do index.css */
+  --color-text-light: #f4f4f4; /* Texto claro para fundos escuros - do index.css */
+  --color-text-dark: #333; /* Texto escuro padrão - do index.css */
+  --color-white: #ffffff; /* do index.css */
+  --color-off-white: #f9f9f9; /* Off-white do index.css (ajustado de f5f0f3) */
+  --color-gray-light: #e0e0e0; /* do index.css */
+  --color-border: #ddd; /* do index.css */
+  --color-success: #28a745; /* do index.css */
+  --color-error: #dc3545; /* do index.css */
+  --color-secondary-text: #666; /* Cor para parágrafos secundários - do index.css */
+
+  --shadow-light: rgba(0, 0, 0, 0.08); /* do index.css */
+  --shadow-medium: rgba(0, 0, 0, 0.15); /* do index.css */
+  --shadow-dark: rgba(0, 0, 0, 0.25); /* do index.css */
+
+  --header-height: 80px; /* Altura do cabeçalho - do index.css */
+}
+
+/* ========================================================= */
+/* ESTILOS GERAIS E RESET (AGORA ALINHADOS COM index.css) */
+/* ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-dark); /* Usando variável do index.css */
+  background: linear-gradient(
+    135deg,
+    var(--color-off-white),
+    var(--color-gray-light)
+  ); /* Usando variáveis do index.css */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Adicionado para consistência com index.css */
+  /* REMOVIDO: padding-top da tag body. Será aplicado ao container de conteúdo. */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative; /* Adicionado para z-index */
+  z-index: 2; /* Adicionado para z-index */
+}
+
+/* Animação de Fundo (AGORA ALINHADA COM index.css) */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  ); /* Usando variáveis do index.css */
+  opacity: 0.1; /* Transparência suave como no index.css */
+  z-index: 0; /* Fica atrás de todo o conteúdo */
+  animation: gradientShift 20s ease infinite alternate; /* Nome da animação do index.css */
+}
+
+@keyframes gradientShift {
+  /* Nome da animação do index.css */
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* LINKS GLOBAIS - AJUSTADOS PARA FONTE MAIS SUAVE E MENOR, E ALINHAMENTO GERAL */
+a {
+  color: var(--color-accent); /* Usando variável do index.css */
+  text-decoration: none;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  font-weight: 400; /* Fonte mais suave */
+  font-size: 0.98em; /* Um pouco menor */
+}
+
+a:hover {
+  color: var(--color-primary); /* Usando variável do index.css */
+  font-weight: 600; /* Pode ficar mais "pesado" ao hover para destaque */
+}
+
+/* ========================================================= */
+/* CABEÇALHO PRINCIPAL - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  color: var(--color-white); /* Usando variável do index.css */
+}
+
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.main-header .logo img {
+  max-height: 50px;
+  width: auto;
+  display: block;
+}
+
+.main-header .logo a:hover img {
+  opacity: 0.8;
+  transition: opacity 0.3s ease; /* Adicionado de volta para consistência */
+}
+
+.main-header .logo a::after {
+  display: none;
+}
+
+/* Menu Hamburguer (Inclusão completa para funcionalidade no HTML) */
+.menu-toggle-checkbox {
+  display: none; /* Esconde o input checkbox */
+}
+
+.menu-toggle {
+  display: none; /* Escondido por padrão, visível apenas em mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+  z-index: 1001; /* Garante que o ícone esteja acima do nav em mobile */
+}
+
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-white);
+  transition: all 0.3s ease;
+  border-radius: 2px; /* Adicionado para consistência */
+}
+
+/* Animação do hamburguer ao abrir */
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle-checkbox:checked + .menu-toggle span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Navegação Principal - AJUSTADO PARA ALINHAR COM O NOVO PADRÃO DE LINKS */
+.main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px; /* Usando gap para espaçamento mais moderno, consistência */
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: var(--color-off-white); /* Usando variável do index.css */
+  font-weight: 400; /* Fonte mais suave no menu */
+  font-size: 1em; /* Ajustado para um pouco menor que o 1.05em anterior, mas consistente */
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+  display: inline-block; /* Mantido para que o ::after funcione corretamente */
+}
+
+.main-nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-accent); /* Usando variável do index.css */
+  transition: width 0.3s ease;
+}
+
+.main-nav ul li a:hover::after,
+.main-nav ul li a.active::after {
+  /* Adicionado .active para consistência */
+  width: 100%;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+  /* Adicionado .active para consistência */
+  color: var(--color-accent); /* Usando variável do index.css */
+  font-weight: 600; /* Destacar no hover */
+}
+
+/* Estilo para o link da página atual (Sublinhado e cor de destaque) */
+.main-nav ul li a.current-page {
+  color: var(--color-accent);
+  font-weight: 600; /* Destaque para página atual */
+}
+
+.main-nav ul li a.current-page::after {
+  width: 100%;
+  background-color: var(--color-accent);
+  left: 0;
+  bottom: 0;
+}
+
+/* Ações do Usuário (login/cadastro/sair) */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Consistência com o outro CSS */
+}
+
+.welcome-message {
+  /* Adicionado para consistência */
+  color: var(--color-gray-light);
+  font-size: 0.95em; /* Ajustado para ser um pouco menor também */
+  font-weight: 400; /* Mais suave */
+  white-space: nowrap;
+  margin-right: 5px;
+}
+
+.button-login,
+.button-register,
+.button-logout {
+  /* Adicionado button-logout para consistência */
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600; /* Mantido para botões para melhor legibilidade */
+  font-size: 0.95em; /* Ligeiramente menor */
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+  white-space: nowrap; /* Adicionado para consistência */
+  border: 2px solid; /* Adicionado para consistência */
+}
+
+.button-login {
+  color: var(--color-white);
+  border-color: var(--color-off-white); /* Usando variável do index.css */
+  background-color: transparent;
+}
+
+.button-login:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.button-register {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.button-register:hover {
+  background-color: var(--color-primary); /* Consistência com o index.css */
+  border-color: var(--color-primary); /* Consistência com o index.css */
+}
+
+.button-logout {
+  /* Adicionado para consistência com o outro CSS */
+  background-color: transparent;
+  color: var(--color-error); /* Cor de erro para o botão de sair */
+  border-color: var(--color-error);
+}
+.button-logout:hover {
+  /* Adicionado para consistência com o outro CSS */
+  background-color: var(--color-error);
+  color: var(--color-white);
+}
+
+/* ========================================================= */
+/* CONTEÚDO PRINCIPAL DA PÁGINA (SOBRE) - AJUSTADO PARA O HEADER FIXO */
+/* ========================================================= */
+main {
+  /* Adicionado main flex-grow para consistência */
+  flex-grow: 1;
+}
+
+.page-content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Ajuste crucial: Adicionar a altura do cabeçalho ao padding-top */
+  padding: calc(40px + var(--header-height)) 20px 40px 20px;
+  min-height: calc(
+    100vh - var(--header-height) - 160px
+  ); /* Ajuste min-height para compensar o footer também */
+  background-color: var(
+    --color-off-white
+  ); /* Para consistência com o background do main/gallery-page-container */
+  box-shadow: inset 0 0 15px var(--shadow-light); /* Consistência com gallery-page-container */
+  position: relative; /* Mantido por conta do z-index anterior */
+  z-index: 2; /* Acima do background-animation */
+}
+
+/* Card Principal "Sobre Nós" (similar ao upload-form-container) */
+.about-card {
+  background-color: var(--color-white);
+  padding: 35px 40px; /* Ajustado para um visual mais refinado */
+  border-radius: 10px;
+  box-shadow: 0 8px 30px var(--shadow-medium); /* Sombra mais proeminente como no upload */
+  width: 100%;
+  max-width: 800px; /* Largura máxima para legibilidade */
+  text-align: center;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.about-card h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.8em; /* Tamanho maior para título, como no upload */
+  color: var(--color-primary-dark);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.about-content {
+  text-align: left; /* Alinhamento do texto interno */
+  line-height: 1.8;
+  font-size: 1.05em; /* Ajuste para o texto de parágrafo, não é um link */
+  color: var(--color-secondary-text);
+}
+
+.about-content p {
+  margin-bottom: 15px;
+}
+
+.about-content h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.8em; /* Tamanho de subtítulo */
+  color: var(--color-primary-dark);
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.about-content ul {
+  list-style: none; /* Remove bullet points padrão */
+  padding: 0;
+  margin: 0 0 20px 0; /* Espaço após a lista */
+}
+
+.about-content ul li {
+  margin-bottom: 10px;
+  font-size: 0.98em; /* Levemente menor para listas */
+  color: var(--color-secondary-text);
+  position: relative;
+  padding-left: 25px; /* Espaço para o ícone */
+}
+
+.about-content ul li::before {
+  content: "🔒"; /* Ícone de cadeado para segurança */
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+
+.about-content .signature {
+  text-align: right;
+  margin-top: 30px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-primary-dark);
+  font-size: 1em;
+}
+
+/* ========================================================= */
+/* RODAPÉ (FOOTER) - AGORA IDÊNTICO AO index.css */
+/* ========================================================= */
+footer {
+  background-color: var(
+    --color-primary-dark
+  ); /* Usando variável do index.css */
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  padding: 40px 0; /* Ajustado para 40px */
+  text-align: center;
+  box-shadow: 0 -4px 10px var(--shadow-dark); /* Usando variável do index.css */
+  margin-top: auto;
+  position: relative; /* Mantido por conta do z-index anterior */
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Ajustado para space-between */
+  align-items: center; /* Adicionado para alinhamento vertical */
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 20px; /* Adicionado gap */
+}
+
+.footer-links {
+  display: flex;
+  gap: 25px; /* Ajustado para 25px */
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-grow: 1; /* Adicionado flex-grow */
+}
+
+.footer-links a {
+  color: var(--color-gray-light); /* Usando variável do index.css */
+  font-weight: 400; /* AJUSTADO: Fonte mais suave */
+  font-size: 0.9em; /* AJUSTADO: Um pouco menor */
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Adicionado transição para font-weight */
+}
+
+.footer-links a:hover {
+  color: var(
+    --color-white
+  ); /* AJUSTADO: Agora muda para branco no hover, como no index.css */
+  font-weight: 600; /* Destaque no hover */
+}
+
+.social-media {
+  display: flex;
+  gap: 15px; /* Ajustado para 15px */
+  flex-grow: 1; /* Adicionado flex-grow */
+  justify-content: flex-end; /* Ajustado para flex-end */
+}
+
+.social-media img {
+  width: 30px; /* Ajustado para consistência com o index.css */
+  height: 30px; /* Ajustado para consistência com o index.css */
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.social-media a:hover img {
+  transform: scale(1.1);
+}
+
+.copyright {
+  font-size: 0.9em; /* Ajustado para 0.9em */
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20px;
+}
+
+/* Animação de Fade In (reutilizada do upload.css) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVIDADE) - AGORA IDÊNTICAS AO index.css */
+/* ========================================================= */
+
+@media (max-width: 992px) {
+  .main-nav ul li {
+    margin-left: 20px;
+  }
+  .user-actions {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header .container {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+
+  .menu-toggle {
+    display: flex; /* Mostra o toggle em telas menores */
+    margin-left: 15px;
+    order: 3;
+  }
+
+  .main-header .logo {
+    flex-grow: 0; /* Consistência */
+  }
+
+  .main-nav {
+    display: block;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .menu-toggle-checkbox:checked ~ .main-nav {
+    max-height: 300px; /* Altura máxima para o menu aberto */
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+    gap: 0; /* Consistência */
+  }
+
+  .main-nav ul li {
+    margin: 0;
+  }
+
+  .main-nav ul li a {
+    color: var(--color-white);
+    padding: 12px 20px;
+    display: block;
+    font-size: 1em; /* Ajuste para mobile */
+    font-weight: 400; /* Mais suave */
+  }
+
+  .main-nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-accent);
+    font-weight: 600; /* Destaque no hover */
+  }
+
+  /* Destaque para link ativo em mobile */
+  .main-nav ul li a.current-page {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-accent) !important;
+    font-weight: 600;
+  }
+  .user-actions {
+    order: 2;
+    margin-left: auto;
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .footer-links a {
+    display: block;
+    margin: 10px 0;
+    font-size: 0.9em; /* Ajuste para mobile */
+  }
+  .social-media {
+    justify-content: center; /* Centraliza ícones sociais em mobile */
+  }
+
+  /* Sobre Card em Mobile */
+  .about-card {
+    padding: 25px 30px;
+  }
+  .about-card h2 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+  }
+  .about-content h3 {
+    font-size: 1.5em;
+    margin-top: 25px;
+  }
+  .about-content p,
+  .about-content ul li {
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-header {
+    padding: 10px 0; /* Consistência */
+  }
+  .main-header .logo img {
+    max-height: 40px;
+  }
+  .user-actions .button-login,
+  .user-actions .button-register,
+  .user-actions .button-logout {
+    /* Adicionado logout para consistência */
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+  .about-card {
+    padding: 20px;
+  }
+  .about-card h2 {
+    font-size: 1.8em;
+  }
+  .about-content h3 {
+    font-size: 1.3em;
+  }
+  .about-content p,
+  .about-content ul li {
+    font-size: 0.9em;
+  }
+  .about-content .signature {
+    font-size: 0.85em;
+  }
+}
